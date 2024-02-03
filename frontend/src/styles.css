@@ -1,0 +1,87 @@
+.wro {
+    color:red;
+}
+
+.cor {
+    color:gray;
+}
+
+.null {
+    color:black;
+}
+
+
+#inputbox {
+    text-align: left;
+    font-family: "Comic Sans MS", "Comic Sans";
+    width: 30%;
+}
+
+#everything {
+    padding: 25% 0;
+    text-align: center;
+}
+
+#inputbar {
+    margin:auto;
+
+}
+
+#quoteStuff{
+    margin:auto;
+    width: 30%;
+    text-align: left;
+    padding: 0;
+}
+
+#timer {
+    text-align: right;
+}
+
+#cursorPos {
+  color:transparent;
+}
+
+span {
+    
+    font-family: "Comic Sans MS", "Comic Sans";
+    font-size: 20px;
+    padding: 0 0.5px; 
+    margin: 0;
+
+}
+
+h1 {
+    font-family: "Comic Sans MS", "Comic Sans";
+    font-size: large;
+}
+
+
+
+.cursor-container {
+    position: absolute;
+    width: 30%;
+    display: block;
+    display: inline-block;
+  }
+
+.cursor {
+    position: absolute;
+    margin: 1px 0;
+
+    width: 1px; 
+    background-color: gray; 
+  }
+  
+  .cursor.visible {
+    border-right-color: transparent; /* Hide cursor when not visible */
+  }
+  
+  @keyframes blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
