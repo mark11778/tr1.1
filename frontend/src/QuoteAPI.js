@@ -12,5 +12,3 @@ const fetchQuote = async (setQuote) => {
     throw error; // Re-throw the error so it can be caught elsewhere
   }
 };
-
-export default fetchQuote;

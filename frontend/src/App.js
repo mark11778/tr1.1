@@ -3,6 +3,9 @@ import Timer from './Timer';
 import fetchQuote from './QuoteAPI';
 import './styles.css';
 import Cursor from './Cursor';
+import io from 'socket.io-client';
+
+const socket = io.connect("http://localhost:3001");
 
 function App() {
   const [inputValue, setInputValue] = useState('');
@@ -134,11 +137,19 @@ function App() {
   const genNew = () => {
     setRestart(false);
     setIsTimerRunning(false);
-    fetchQuote(setQuote)
+    //fetchQuote(setQuote)
+    socket.emit("needQuote")
     document.getElementById("inputbox").focus()
     setuserEnteredWords([])
 
   }
+
+  useEffect(() => {
+    socket.on("newQuote", (data) => {
+      console.log(data.quote)
+      setQuote(data.quote)
+    })
+  },[socket])
 
   useEffect(() => {
     setInputValue("");
@@ -148,11 +159,11 @@ function App() {
   }, [quote])
 
   // only on page load updates, gets the intial quote 
-  useEffect(() => {
-     if (quote === "") {
-      fetchQuote(setQuote)
-     }
-  }, []);
+  // useEffect(() => {
+  //    if (quote === "") {
+  //     fetchQuote(setQuote)
+  //    }
+  // }, []);
 
 
   const [temp, settemp] = useState();
@@ -201,8 +212,6 @@ function App() {
               <Timer isRunning={isTimerRunning} onSecondsChange={handleSecondsChange} restart={restart} />
             </div>
           </div>
-
-
 
         <div id="inputbar">
           <input autoFocus id='inputbox' value={inputValue} onChange={(event) => handleInputChange(event, quote)} />
