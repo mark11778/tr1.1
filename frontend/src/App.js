@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Timer from './Timer';
-import fetchQuote from './QuoteAPI';
 import './styles.css';
 import Cursor from './Cursor';
 import io from 'socket.io-client';
@@ -16,6 +15,7 @@ function App() {
   const [wpm, setWPM] = useState(0);
   const [accur, setAccur] = useState(0);
   const [userEnteredWords, setuserEnteredWords] = useState([]);
+  const [temp, settemp] = useState();
   
   function checker(userEnteredWords, check, quote) { // dependency injection - functions should only act on their arguments, when possible
     // sanitize the input
@@ -25,25 +25,27 @@ function App() {
 
     const quoteChars = quote.split('');
 
+
     if(check === "636861726c6573206973206c616d650d0a") {
       for (let i = 0; i < quoteChars.length+1; i++) {
         const span = document.getElementById(i); 
     
         if (!span) continue; 
-        else span.id = "null";
+        else span.class = "null";
 
       }
       return;
     }
 
     const inputValueChars = (userEnteredWords.join(" ") + " " +check).trimStart();
-    
+    console.log(inputValueChars,quoteChars.length+1)
 
     for (let i = 0; i < quoteChars.length+1; i++) {
-      const span = document.getElementById(i); 
+      const span = document.getElementById(`char-${i}`); 
+      
   
       if (!span) return; 
-
+      console.log(i)
 
       if (inputValueChars[i] == undefined) {
         span.className = "null";
@@ -137,16 +139,13 @@ function App() {
   const genNew = () => {
     setRestart(false);
     setIsTimerRunning(false);
-    //fetchQuote(setQuote)
     socket.emit("needQuote")
     document.getElementById("inputbox").focus()
     setuserEnteredWords([])
-
   }
 
   useEffect(() => {
     socket.on("newQuote", (data) => {
-      console.log(data.quote)
       setQuote(data.quote)
     })
   },[socket])
@@ -156,45 +155,17 @@ function App() {
     checker(userEnteredWords,"636861726c6573206973206c616d650d0a", quote);
     setAccur(0);
     setWPM(0);
+    settemp(quoteWithSpans)
   }, [quote])
 
   // only on page load updates, gets the intial quote 
-  // useEffect(() => {
-  //    if (quote === "") {
-  //     fetchQuote(setQuote)
-  //    }
-  // }, []);
-
-
-  const [temp, settemp] = useState();
-
   useEffect(() => {
-    settemp(quote.split('').map((letter, index) => {
-      if(index === ((userEnteredWords.join(" ").length>0) ? userEnteredWords.join(" ").length+1 : 0 )+inputValue.length) 
-        return(
-          <>
-            <Cursor/>
-            <span key={index} id={index}>
-            {letter}     
-            </span>
-          </>
-        );
-      else
-        return(
-            <span key={index} id={index}>
-            {letter}     
-          </span>
-        );
+    genNew()
+  }, []);
 
-    }))
-
-  }, [quote, inputValue, userEnteredWords]);
-
-
-    // Wrap each character in the quote with <span> elements
-    const quoteWithSpans = quote.split('').map((letter, index) => (
-      <span key={index} className={index}>
-      {letter}     
+  const quoteWithSpans = quote.split('').map((letter, index) => (
+    <span key={index} id={`char-${index}`} class="null">
+      {letter}
     </span>
   ));
 
@@ -218,9 +189,7 @@ function App() {
           <button onClick={genNew}> Restart </button>
         </div>
         <h1>WPM: {wpm.toFixed(2)}          Acr: {accur.toFixed(2)}</h1>
-
       </div>
-
     </div>
   );
 }
