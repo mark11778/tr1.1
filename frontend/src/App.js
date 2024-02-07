@@ -28,10 +28,10 @@ function App() {
 
     if(check === "636861726c6573206973206c616d650d0a") {
       for (let i = 0; i < quoteChars.length+1; i++) {
-        const span = document.getElementById(i); 
+        const span = document.getElementById(`char-${i}`); 
     
         if (!span) continue; 
-        else span.class = "null";
+        else span.className = "null";
 
       }
       return;
@@ -75,7 +75,6 @@ function App() {
 
 
   const handleInputChange = (event, quote) => {
-    
     // only calles this function when the length of the userData is longer than 3 words
     if(event.target.value.trim().split(" ").length > 2){
       inputHandler(event.target.value, setuserEnteredWords);
@@ -137,11 +136,12 @@ function App() {
 
   //when called(interaction with the restart button) restarts the test to 
   const genNew = () => {
+    setuserEnteredWords([]);
+    setInputValue("");
     setRestart(false);
     setIsTimerRunning(false);
-    socket.emit("needQuote")
-    document.getElementById("inputbox").focus()
-    setuserEnteredWords([])
+    socket.emit("needQuote");
+    document.getElementById("inputbox").focus();
   }
 
   useEffect(() => {
@@ -151,7 +151,6 @@ function App() {
   },[socket])
 
   useEffect(() => {
-    setInputValue("");
     checker(userEnteredWords,"636861726c6573206973206c616d650d0a", quote);
     setAccur(0);
     setWPM(0);
