@@ -5,6 +5,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const fetchQuote = require('./quoteGen');
 
+fetchQuote();
 
 app.use(cors());
 
@@ -22,7 +23,8 @@ io.on("connection", (socket) => {
 
     socket.on("needQuote", async () => {
         try {
-            const quote = await fetchQuote(); // Assuming fetchQuote is an async function
+            const quote = await fetchQuote();
+            console.log("here", quote)
             socket.emit("newQuote", { quote }); // Use socket.emit to send data back to the client
         } catch (error) {
             console.error('Error fetching quote:', error);

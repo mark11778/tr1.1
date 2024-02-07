@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Timer from './Timer';
-import './styles.css';
-import Cursor from './Cursor';
+import './styles.css';  
 import io from 'socket.io-client';
 
 const socket = io.connect("http://localhost:3001");

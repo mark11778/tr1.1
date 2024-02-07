@@ -1,13 +1,20 @@
 const axios = require('axios');
 
-// let quote = null; // Use `null` for uninitialized value
+let quote = null; // Use `null` for uninitialized value
 
 async function fetchQuote() {
-  // if (quote === null) { // Check if `quote` is `null`
+  // Immediately return the current quote if it's not null
+  if (quote !== null) {
+    const currentQuote = quote; // Store the current quote
+    // Asynchronously update the quote for the next call
+    APICall().then(updatedQuote => {
+      quote = updatedQuote;
+    }).catch(error => console.error('Error updating quote:', error));
+    return currentQuote; // Return the current quote without waiting for the next one
+  } else {
+    // If quote is null, fetch a new one and wait for it
     return await APICall(); // Await the async call
-  // } else {
-  //   return quote;
-  // }
+  }
 }
 
 const APICall = async () => { // Make function async
