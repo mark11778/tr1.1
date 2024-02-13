@@ -106,6 +106,7 @@ function InputBarFcn({quote, setTimerRunning, secs}) {
 
     useEffect(() => {
         setTimerRunning(false);
+        setuserEnteredWords([]);
         setInputValue("");
         for (let i = 0; i < quote.length; i++) {
           const span = document.getElementById(`char-${i}`); 
