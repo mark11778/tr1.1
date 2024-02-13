@@ -10,11 +10,8 @@ export const socket = io.connect("http://localhost:3001");
 function App() {
   //const [inputValue, setInputValue] = useState('');
   const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const [restart, setRestart] = useState(false);
-  const [timerSeconds, setTimerSeconds] = useState(0);
   const [quote, setQuote] = useState("temp");
-  const [wpm, setWPM] = useState(0);
-  const [accur, setAccur] = useState(0);
+
   //const [userEnteredWords, setuserEnteredWords] = useState([]);
 
   // this needs to be in the parent file as it is what controlls alot of the other functions
@@ -115,14 +112,6 @@ function App() {
   //   }
   // };
 
-
-  //updates the seconds being displayed when the useEffect in the timer files calls this function
-  const handleSecondsChange = (seconds) => {
-    if (seconds !== timerSeconds) {
-      setTimerSeconds(seconds);
-    }
-  };
-
   useEffect(() => {
     setIsTimerRunning(false);
     document.getElementById("inputbox").focus();
@@ -143,13 +132,8 @@ function App() {
             </div>
           </div>
 
-          <InputBarFcn quote={quote} setTimerRunning={setIsTimerRunning}/>
-
-        {/* <div id="inputbar">
-          <input autoFocus id='inputbox' value={inputValue} onChange={(event) => handleInputChange(event, quote)} />
-          <button onClick={() => socket.emit("needQuote")}> Restart </button>
-        </div> */}
-        <h1>WPM: {wpm.toFixed(2)}          Acr: {accur.toFixed(2)}</h1>
+          <InputBarFcn quote={quote} setTimerRunning={setIsTimerRunning} secs={isTimerRunning}/>
+        
       </div>
     </div>
   );

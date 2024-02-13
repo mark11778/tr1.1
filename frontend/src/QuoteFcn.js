@@ -1,5 +1,5 @@
 import { socket } from "./App";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 function QuoteFcn({quote}) {
 

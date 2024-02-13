@@ -1,9 +1,11 @@
 import { socket } from "./App";
 import React, { useEffect, useState } from 'react';
 
-function InputBarFcn({quote, setTimerRunning}) {
+function InputBarFcn({quote, setTimerRunning, secs}) {
     const [userEnteredWords, setuserEnteredWords] = useState([]);
     const [inputValue, setInputValue] = useState('');
+    const [wpm, setWPM] = useState(0);
+    const [accur, setAccur] = useState(0);
 
     // updated the input box to only have the last two "words" entered and store this new/change data
     // into the UserEnteredWords array
@@ -33,46 +35,75 @@ function InputBarFcn({quote, setTimerRunning}) {
         if((userAttemptStr.length===(quote.length))) {
             setInputValue('')
             setuserEnteredWords([])
-
+            results(userAttemptStr, quote)
           //stops the test once the length of both the inputed value and the quote are the same length
           setTimerRunning(false);
     
-        //   let correctValues = quote.split("");
-    
-        //   let userAttempt = userAttemptStr.split("");
-        //   let correctInput = 0;
-    
-        //   for (let i = 0; i <userAttempt.length; i++) // the user input is always <= quote length since the <input has a maxLength now
-        //       if(correctValues[i] == userAttempt[i]) 
-        //         correctInput += 1;
-    
-        //   setAccur(((correctInput/correctValues.length)*100));
-    
-        //   correctValues = quote.split(" ");
-        //   userAttempt = userAttemptStr.split(" ");
-        //   correctInput = 0;
-    
-        //   for (let i = 0; i <correctValues.length; i++) 
-        //     if(userAttempt[i] != null) {
-        //       if (i == 0) {
-        //         correctValues[0] = correctValues[0].substring(1);
-        //         correctValues[correctValues.length-1] = correctValues[correctValues.length-1].slice(0,-1);
-        //       }
-        //       if(correctValues[i] == userAttempt[i]) 
-        //         correctInput += 1;
-        //     }
-            
-        //     console.log(correctInput, timerSeconds)
-        //   setWPM(((correctInput/timerSeconds)*60));
+
         }
       };
+
+      const results = (userFinal, quote) => {
+          let correctValues = quote.split("");
+    
+          let userAttempt = userFinal.split("");
+          let correctInput = 0;
+    
+          for (let i = 0; i <userAttempt.length; i++) // the user input is always <= quote length since the <input has a maxLength now
+              if(correctValues[i] == userAttempt[i]) 
+                correctInput += 1;
+    
+          setAccur(((correctInput/correctValues.length)*100));
+    
+          correctValues = quote.split(" ");
+          userAttempt = userFinal.split(" ");
+          correctInput = 0;
+    
+          for (let i = 0; i <correctValues.length; i++) 
+            if(userAttempt[i] != null) {
+              if (i == 0) {
+                correctValues[0] = correctValues[0].substring(1);
+                correctValues[correctValues.length-1] = correctValues[correctValues.length-1].slice(0,-1);
+              }
+              if(correctValues[i] == userAttempt[i]) 
+                correctInput += 1;
+            }
+            
+            console.log(correctInput, secs)
+          setWPM(((correctInput/secs)*60));
+      }
 
 
 
     useEffect(() => {
-        setTimerRunning(true);
-        console.log(inputValue)
+        if (inputValue.length !== 0){
+          setTimerRunning(true);
+          console.log(inputValue)
+        }
+
     }, [inputValue]);
+
+    useEffect(() => {
+      const userInput = (userEnteredWords.join(" ") + " " +inputValue).trimStart();
+      if (inputValue.length !== 0){
+        for (let i = 0; i < quote.length; i++) {
+            const span = document.getElementById(`char-${i}`); 
+            
+            if (!span) return; 
+            // console.log(userInput, userInput.charAt(i), quote.charAt(i))
+      
+            if (userInput[i] == undefined) {
+              span.className = "null";
+            } else if (userInput.charAt(i) == quote.charAt(i)){
+              console.log(userInput.charAt(i) == quote.charAt(i), userInput.charAt(i))
+              span.className = "cor";
+            } else {
+              span.className = "wro";
+            }
+        }
+      }
+      }, [inputValue, quote]);
+
 
     useEffect(() => {
         setTimerRunning(false);
@@ -84,6 +115,7 @@ function InputBarFcn({quote, setTimerRunning}) {
         <div id="inputbar">
         <input autoFocus id='inputbox' value={inputValue} onChange={(event) => handleInputChange(event, quote)} />
         <button onClick={() => socket.emit("needQuote")}> Restart </button>
+        <h1>WPM: {wpm.toFixed(2)}          Acr: {accur.toFixed(2)}</h1>
       </div>
     );
 }
