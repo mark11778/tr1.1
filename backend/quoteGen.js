@@ -1,6 +1,11 @@
 const axios = require('axios');
+const https = require('https');
 
 let quote = null; // Use `null` for uninitialized value
+
+const agent = new https.Agent({  
+  rejectUnauthorized: false
+});
 
 async function fetchQuote() {
   // Immediately return the current quote if it's not null
@@ -19,7 +24,7 @@ async function fetchQuote() {
 
 const APICall = async () => { // Make function async
   try {
-    const response = await axios.get('https://api.quotable.io/random'); // Corrected URL and await the response
+    const response = await axios.get('https://api.quotable.io/random', { httpsAgent: agent }); // Corrected URL and await the response
     const quoteContent = response.data.content; // Correctly access the quote content
     console.log(quoteContent);
     quote = quoteContent; // Cache the quote content for future calls

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-
-function Timer({ isRunning, onSecondsChange, restart }) {
+function Timer({ isRunning, setTimerRunning, quote }) {
   const [seconds, setSeconds] = useState(0);
 
   // this useEffect will execute when the isRunning var is changed 
@@ -22,24 +21,13 @@ function Timer({ isRunning, onSecondsChange, restart }) {
     };
   }, [isRunning]);
 
-
-  /*
-  this useEffect hook listens to the second varible for when it changes and updates the second val
-  calls the onSecondsChange function in the app file to update the seconds that are being displayed
-  */
-  useEffect(() => {
-    onSecondsChange(seconds);
-  }, [seconds, onSecondsChange]);
-
-
   /*
   when the restart button is press and the restart boelan is updated this will change the current seconds to 0
   */
   useEffect(() => {
-    if (!restart) {
+      setTimerRunning(false);
       setSeconds(0);
-    }
-  }, [restart]);
+  }, [quote]);
 
 
   return (
