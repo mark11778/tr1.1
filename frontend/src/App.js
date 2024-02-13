@@ -6,7 +6,6 @@ import { QuoteFcn } from './QuoteFcn';
 import { InputBarFcn } from './InputBarFcn';
 
 export const socket = io.connect("http://localhost:3001");
-export const socket = io.connect("http://localhost:3001");
 
 function App() {
   //const [inputValue, setInputValue] = useState('');
