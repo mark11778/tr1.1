@@ -19,13 +19,10 @@ function App() {
     })
   },[socket])
 
-
-
   useEffect(() => {
     setIsTimerRunning(false);
     document.getElementById("inputbox").focus();
   }, [quote])
-
 
     return (
       <div>
@@ -40,7 +37,7 @@ function App() {
             </div>
           </div>
 
-          <InputBarFcn quote={quote} setTimerRunning={setIsTimerRunning} secs={second}/>
+          <InputBarFcn quote={quote} setTimerRunning={setIsTimerRunning} secs={second} setQuote={setQuote}/>
         
       </div>
     </div>

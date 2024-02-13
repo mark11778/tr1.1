@@ -1,7 +1,7 @@
 import { socket } from "./App";
 import React, { useEffect, useState } from 'react';
 
-function InputBarFcn({quote, setTimerRunning, secs}) {
+function InputBarFcn({quote, setTimerRunning, secs, setQuote}) {
     const [userEnteredWords, setuserEnteredWords] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [wpm, setWPM] = useState(0);
@@ -27,19 +27,18 @@ function InputBarFcn({quote, setTimerRunning, secs}) {
           inputHandler(event.target.value, setuserEnteredWords);
         }
         else {
-          setInputValue(event.target.value)
+          if (event.target.value.trim() === "") setInputValue("");
+          else setInputValue(event.target.value);
         }
         
         const userAttemptStr = (userEnteredWords.join(" ") + " " +event.target.value).trimStart()
         
+        //stops the test once the length of both the inputed value and the quote are the same length
         if((userAttemptStr.length===(quote.length))) {
             setInputValue('')
             setuserEnteredWords([])
             results(userAttemptStr, quote)
-          //stops the test once the length of both the inputed value and the quote are the same length
-          setTimerRunning(false);
-    
-
+            setTimerRunning(false);
         }
       };
 
@@ -86,8 +85,9 @@ function InputBarFcn({quote, setTimerRunning, secs}) {
     useEffect(() => {
       const userInput = (userEnteredWords.join(" ") + " " +inputValue).trimStart();
       if (inputValue.length !== 0){
-        for (let i = 0; i < quote.length; i++) {
+        for (let i = 0; i < quote.length+1; i++) {
             const span = document.getElementById(`char-${i}`); 
+            
             
             if (!span) return; 
       
@@ -101,9 +101,11 @@ function InputBarFcn({quote, setTimerRunning, secs}) {
             }
         }
       }
-      }, [inputValue, quote]);
+      }, [inputValue]);
 
 
+
+      // when quote changes reset all aspects of the test
     useEffect(() => {
         setTimerRunning(false);
         setuserEnteredWords([]);
@@ -119,11 +121,21 @@ function InputBarFcn({quote, setTimerRunning, secs}) {
 
     }, [quote]);
 
+    // const restartTest = () => {
+    //   setTimerRunning(false);
+    //   setuserEnteredWords([]);
+    //   setInputValue("");
+    //   let temp = quote
+    //   setQuote("")
+    //   setQuote(temp)
+    // }
+
 
     return(
         <div id="inputbar">
         <input autoFocus id='inputbox' value={inputValue} onChange={(event) => handleInputChange(event, quote)} />
-        <button onClick={() => socket.emit("needQuote")}> Restart </button>
+        <button onClick={() => socket.emit("needQuote")}> New </button>
+        {/* <button onClick={restartTest}> Restart </button> */}
         <h1>WPM: {wpm.toFixed(2)}          Acr: {accur.toFixed(2)}</h1>
       </div>
     );
