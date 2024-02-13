@@ -90,7 +90,6 @@ function InputBarFcn({quote, setTimerRunning, secs}) {
             const span = document.getElementById(`char-${i}`); 
             
             if (!span) return; 
-            // console.log(userInput, userInput.charAt(i), quote.charAt(i))
       
             if (userInput[i] == undefined) {
               span.className = "null";
@@ -108,6 +107,15 @@ function InputBarFcn({quote, setTimerRunning, secs}) {
     useEffect(() => {
         setTimerRunning(false);
         setInputValue("");
+        for (let i = 0; i < quote.length; i++) {
+          const span = document.getElementById(`char-${i}`); 
+          
+          if (!span) continue; 
+
+          span.className = "null";
+          
+        }
+
     }, [quote]);
 
 

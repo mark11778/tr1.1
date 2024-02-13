@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function Timer({ isRunning, setTimerRunning, quote }) {
-  const [seconds, setSeconds] = useState(0);
+function Timer({ isRunning, setTimerRunning, quote , seconds, setSeconds}) {
 
   // this useEffect will execute when the isRunning var is changed 
   useEffect(() => {
