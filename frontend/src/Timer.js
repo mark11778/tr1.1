@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+
 function Timer({ isRunning, onSecondsChange, restart }) {
   const [seconds, setSeconds] = useState(0);
 

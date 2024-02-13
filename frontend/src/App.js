@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Timer from './Timer';
 import './styles.css';  
 import io from 'socket.io-client';
+import QuoteData from './quoteData';
 
-const socket = io.connect("http://localhost:3001");
+export const socket = io.connect("http://localhost:3001");
 
 function App() {
   const [inputValue, setInputValue] = useState('');
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [restart, setRestart] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(0);
-  const [quote, setQuote] = useState("");
+  //const [quote, setQuote] = useState("");
   const [wpm, setWPM] = useState(0);
   const [accur, setAccur] = useState(0);
   const [userEnteredWords, setuserEnteredWords] = useState([]);
-  const [temp, settemp] = useState();
+  //const [temp, settemp] = useState();
   
   function checker(userEnteredWords, check, quote) { // dependency injection - functions should only act on their arguments, when possible
     // sanitize the input
@@ -143,29 +144,29 @@ function App() {
     document.getElementById("inputbox").focus();
   }
 
-  useEffect(() => {
-    socket.on("newQuote", (data) => {
-      setQuote(data.quote)
-    })
-  },[socket])
+  // useEffect(() => {
+  //   socket.on("newQuote", (data) => {
+  //     setQuote(data.quote)
+  //   })
+  // },[socket])
 
   useEffect(() => {
     checker(userEnteredWords,"636861726c6573206973206c616d650d0a", quote);
     setAccur(0);
     setWPM(0);
-    settemp(quoteWithSpans)
+    // settemp(quoteWithSpans)
   }, [quote])
 
   // only on page load updates, gets the intial quote 
-  useEffect(() => {
-    genNew()
-  }, []);
+  // useEffect(() => {
+  //   genNew()
+  // }, []);
 
-  const quoteWithSpans = quote.split('').map((letter, index) => (
-    <span key={index} id={`char-${index}`} class="null">
-      {letter}
-    </span>
-  ));
+  // const quoteWithSpans = quote.split('').map((letter, index) => (
+  //   <span key={index} id={`char-${index}`} class="null">
+  //     {letter}
+  //   </span>
+  // ));
 
 
     return (
@@ -173,8 +174,8 @@ function App() {
         <div id="everything">
           <div id="quoteStuff">
             <div id="Quote">
-              {/* <Cursor input={quote.slice(0,((userEnteredWords.join(" ").length>0) ? userEnteredWords.join(" ").length+1 : 0 )+inputValue.length)} /> */}
-              {temp}
+              {/* {temp} */}
+              <QuoteData/>
             </div>
 
             <div id="timer">
